@@ -1,6 +1,7 @@
 import HomePage from '../Pages/Home.page'
 import LoginPage from '../Pages/Login.page'
 import allureReporter from "@wdio/allure-reporter"
+//import timeLineService from 'wdio-timeline-reporter/timeline-service'
 const assert = require('assert')
 
 describe('Talech page', () => {

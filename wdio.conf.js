@@ -1,3 +1,5 @@
+const { TimelineService } = require('wdio-timeline-reporter/timeline-service')
+
 exports.config = {
     //
     // ====================
@@ -113,7 +115,7 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['selenium-standalone'],
+    services: ['selenium-standalone', [TimelineService]],
     
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -138,7 +140,19 @@ exports.config = {
     outputDir: 'allure-results',
     disableWebdriverStepsReporting: true,
     disableWebdriverScreenshotsReporting: false,
-}]],
+}],
+        ['timeline',
+            {
+                outputDir: './timelineReport',
+                embedImages: true,
+                images: {
+                  quality: 80,
+                  resize: false,
+                  reductionRatio: 2
+                },
+                screenshotStrategy: 'before:click'
+            }]
+    ],
  
     //
     // Options to be passed to Mocha.

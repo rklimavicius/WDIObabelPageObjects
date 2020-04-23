@@ -1,5 +1,6 @@
 import LoginPage from '../Pages/Login.page'
 import allureReporter from "@wdio/allure-reporter";
+//import timeLineService from 'wdio-timeline-reporter/timeline-service'
 //const chai = require('chai');
 
 beforeEach(function () {
