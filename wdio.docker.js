@@ -1,5 +1,3 @@
-const { TimelineService } = require('wdio-timeline-reporter/timeline-service')
-
 exports.config = {
     //
     // ====================
@@ -9,6 +7,9 @@ exports.config = {
     // WebdriverIO allows it to run your tests in arbitrary locations (e.g. locally or
     // on a remote machine).
     runner: 'local',
+    hostname: "localhost",
+    port: 4444,
+    path: "/wd/hub",
     //
     // ==================
     // Specify Test Files
@@ -59,15 +60,7 @@ exports.config = {
         // it is possible to configure which logTypes to include/exclude.
         // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
         // excludeDriverLogs: ['bugreport', 'server'],
-    },
-    {
-        maxInstances: 1,
-        browserName: 'safari'
-    },
-        {
-            maxInstances: 1,
-            browserName: 'firefox'
-        }],
+    }],
     //
     // ===================
     // Test Configurations
@@ -75,7 +68,7 @@ exports.config = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'error',
+    logLevel: 'info',
     //
     // Set specific log levels per logger
     // loggers:
@@ -115,7 +108,7 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['selenium-standalone', [TimelineService]],
+    services: ['docker'],
     
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -140,18 +133,7 @@ exports.config = {
     outputDir: 'allure-results',
     disableWebdriverStepsReporting: true,
     disableWebdriverScreenshotsReporting: false,
-}],
-        ['timeline',
-            {
-                outputDir: './timelineReport',
-                embedImages: true,
-                images: {
-                  quality: 80,
-                  resize: false,
-                  reductionRatio: 2
-                },
-                screenshotStrategy: 'before:click'
-            }]
+}]
     ],
  
     //
@@ -161,6 +143,15 @@ exports.config = {
         ui: 'bdd',
         require: ['@babel/register'],
         timeout: 60000
+    },
+    dockerLogs: './',
+    dockerOptions: {
+        image: 'selenium/standalone-chrome',
+        healthCheck: 'http://localhost:4444',
+        options: {
+            p: ['4444:4444'],
+            shmSize: '2g'
+        }
     },
     //
     // =====
@@ -240,11 +231,6 @@ exports.config = {
      */
     // afterTest: function(test, context, { error, result, duration, passed, retries }) {
     // },
-    afterTest: function(test) {
-        //if (test.error !== undefined) {
-            browser.takeScreenshot();
-        //}
-    }
 
     /**
      * Hook that gets executed after the suite has ended
